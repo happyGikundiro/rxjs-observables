@@ -1,0 +1,57 @@
+<div class="px-20 xl:px-40 py-10 space-y-8">
+    <form [formGroup]="searchForm">
+      <div>
+        <input
+          type="text"
+          formControlName="searchTerm"
+          placeholder="Search..."
+          class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-green-900 focus:border-green-900"
+        />
+        <div *ngIf="searchForm.get('searchTerm')?.invalid && searchForm.get('searchTerm')?.touched">
+          <small *ngIf="searchForm.get('searchTerm')?.errors?.['required']" class="text-red-700">
+            Search term is required.
+          </small>
+          <small *ngIf="searchForm.get('searchTerm')?.errors?.['minlength']" class="text-red-700">
+            Search term must be at least 3 characters long.
+          </small>
+        </div>
+      </div>
+    </form>
+  
+    <app-loading *ngIf="loading"></app-loading>
+    <div *ngIf="error">{{ error }}</div>
+  
+    <div *ngIf="errorMessage">{{ errorMessage }}</div>
+  
+    <div *ngIf="searchResults || combinedData" class="space-y-10">
+      <ul *ngIf="searchResults?.userDetails || combinedData?.userDetails">
+        <li *ngFor="let user of (searchResults?.userDetails || combinedData?.userDetails)" class="flex gap-4 items-center">
+          <img [src]="user.profile" alt="{{ user.name }}'s profile picture" class="rounded-full w-20 h-20 object-cover" />
+          <span>
+            <strong>{{ user.name }}</strong>
+            <p>{{ user.description }}</p>
+          </span>
+        </li>
+      </ul>
+  
+      <ul class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <li
+          *ngFor="let post of (searchResults?.userPosts || combinedData?.userPosts)"
+          class="bg-white shadow-md rounded-lg overflow-hidden"
+        >
+          <img
+            [src]="post.image"
+            [alt]="post.title"
+            class="w-full h-48 object-cover"
+          />
+          <div class="p-4">
+            <h3 class="text-lg font-semibold text-gray-800 mb-2">{{ post.title }}</h3>
+            <p class="text-gray-600">{{ post.description }}</p>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+  
+  <div class="px-20 xl:px-40 py-10">
+  </div>
